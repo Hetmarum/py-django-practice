@@ -1,12 +1,44 @@
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
-from tasks.models import Tag
+from tasks.models import Tag, Task
 
 
-class IndexView(TemplateView):
+class TaskListView(ListView):
+    model = Task
     template_name = "tasks/index.html"
+    context_object_name = "task_list"
+    ordering = ["is_done", "-created_at"]
+
+class TaskCreateView(CreateView):
+    model = Task
+    fields = "__all__"
+    template_name = "tasks/task_form.html"
+    success_url = reverse_lazy("tasks:task-list")
+
+class TaskUpdateView(UpdateView):
+    model = Task
+    fields = "__all__"
+    template_name = "tasks/task_form.html"
+    success_url = reverse_lazy("tasks:task-list")
+
+class TaskDeleteView(DeleteView):
+    model = Task
+    template_name = "tasks/task_confirm_delete.html"
+    success_url = reverse_lazy("tasks:task-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["previous_url"] = self.request.META.get("HTTP_REFERER")
+        return context
+
+from django.shortcuts import redirect, get_object_or_404
+
+def toggle_task_status(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.is_done = not task.is_done
+    task.save()
+    return redirect("tasks:task-list")
 
 
 class TagListView(ListView):
