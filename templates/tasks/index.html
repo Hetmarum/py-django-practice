@@ -18,7 +18,7 @@
             <div class="text-muted small">
               Created: {{ task.created_at|date:"F j, Y, g:i a" }}
               {% if task.deadline %}
-                <span class="text-danger">Deadline: {{ task.deadline|date:"F j, Y, g:i a" }}</span>
+                <span class="text-danger"><strong>Deadline: {{ task.deadline|date:"F j, Y, g:i a" }}</strong></span>
               {% endif %}
             </div>
 

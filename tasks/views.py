@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
+from tasks.forms import TaskForm
 from tasks.models import Tag, Task
 
 
@@ -10,15 +11,17 @@ class TaskListView(ListView):
     context_object_name = "task_list"
     ordering = ["is_done", "-created_at"]
 
+
 class TaskCreateView(CreateView):
     model = Task
-    fields = "__all__"
+    form_class = TaskForm
     template_name = "tasks/task_form.html"
     success_url = reverse_lazy("tasks:task-list")
 
+
 class TaskUpdateView(UpdateView):
     model = Task
-    fields = "__all__"
+    form_class = TaskForm
     template_name = "tasks/task_form.html"
     success_url = reverse_lazy("tasks:task-list")
 
