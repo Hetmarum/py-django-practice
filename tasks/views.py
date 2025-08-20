@@ -1,5 +1,12 @@
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    TemplateView,
+    ListView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 
 from tasks.forms import TaskForm
 from tasks.models import Tag, Task
@@ -25,6 +32,7 @@ class TaskUpdateView(UpdateView):
     template_name = "tasks/task_form.html"
     success_url = reverse_lazy("tasks:task-list")
 
+
 class TaskDeleteView(DeleteView):
     model = Task
     template_name = "tasks/task_confirm_delete.html"
@@ -35,7 +43,6 @@ class TaskDeleteView(DeleteView):
         context["previous_url"] = self.request.META.get("HTTP_REFERER")
         return context
 
-from django.shortcuts import redirect, get_object_or_404
 
 def toggle_task_status(request, pk):
     task = get_object_or_404(Task, pk=pk)
