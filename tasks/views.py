@@ -23,7 +23,18 @@ class TagCreateView(CreateView):
 
 
 class TagUpdateView(UpdateView):
-    pass
+    model = Tag
+    fields = "__all__"
+    template_name = "tasks/tag_form.html"
+    success_url = reverse_lazy("tasks:tag-list")
+
 
 class TagDeleteView(DeleteView):
-    pass
+    model = Tag
+    success_url = reverse_lazy("tasks:tag-list")
+    template_name = "tasks/tag_confirm_delete.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["previous_url"] = self.request.META.get("HTTP_REFERER")
+        return context
